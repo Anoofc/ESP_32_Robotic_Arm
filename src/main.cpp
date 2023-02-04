@@ -9,7 +9,7 @@
 #include <BlynkSimpleEsp32.h>
 #include <Servo.h>
 
-// Your WiFi credentials.
+// Your WiFi credentials. 
 // Set password to "" for open networks.
 char ssid[] = "PiHOME";
 char pass[] = "87654321";
