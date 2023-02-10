@@ -13,13 +13,14 @@
 // Set password to "" for open networks.
 char ssid[] = "PiHOME";
 char pass[] = "87654321";
-Servo CLAW, WRIST, SHOLDER, ELBOW, servo5;
+Servo CLAW, WRIST, SHOLDER, ELBOW, PALM;
 
 
 int posWRIST = 0;
 int posCLAW = 0;
 int posSHOLDER = 0;
 int posELBOW = 0;
+int posPalm = 0;
 
 BLYNK_WRITE(V0)
 {
@@ -82,9 +83,18 @@ BLYNK_WRITE(V3)
 }
 BLYNK_WRITE(V4)
 {
-  servo5.write(param.asInt());
+  int val(param.asInt());
+  while (posPalm>val){
+    PALM.write(posPalm);
+    posPalm--;              // tell servo to go to position in variable 'pos'
+    delay(30);
+  }
+  while (posPalm<val){
+    PALM.write(posPalm);
+    posPalm++;              // tell servo to go to position in variable 'pos'
+    delay(30);
+  }
 }
-
 void setup()
 {
   // Debug console
@@ -99,7 +109,7 @@ void setup()
   WRIST.attach(26);
   SHOLDER.attach(27);
   ELBOW.attach(14);
-  servo5.attach(12);
+  PALM.attach(12);
 }
 
 void loop()
