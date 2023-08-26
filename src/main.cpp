@@ -11,8 +11,8 @@
 
 // Your WiFi credentials. 
 // Set password to "" for open networks.
-char ssid[] = "PiHOME";
-char pass[] = "87654321";
+char ssid[] = "YOUR_SSID ";
+char pass[] = "YOUR_PASSWORD";
 Servo CLAW, WRIST, SHOLDER, ELBOW, PALM, BASE;
 
 
