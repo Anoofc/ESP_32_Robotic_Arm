@@ -23,94 +23,59 @@ byte posELBOW = 0;
 byte posPalm = 0;
 byte posBase = 0;
 
-BLYNK_WRITE(V0)
-{
-  int val(param.asInt());
-  while (posCLAW>val){
-    CLAW.write(posCLAW);
-    posCLAW--;              // tell servo to go to position in variable 'pos'
-    delay(30);
-  }
-  while (posCLAW<val){
-    CLAW.write(posCLAW);
-    posCLAW++;              // tell servo to go to position in variable 'pos'
-    delay(30);
-  }
-}
-BLYNK_WRITE(V1)
-{
-  
-  int val(param.asInt());
-  while (posWRIST>val){
-    WRIST.write(posWRIST);
-    posWRIST--;              // tell servo to go to position in variable 'pos'
-    delay(15);
-  }
-  while (posWRIST<val){
-    WRIST.write(posWRIST);
-    posWRIST++;              // tell servo to go to position in variable 'pos'
-    delay(15);
+int servoSpeed = 5; // Increase for faster movement, decrease for slower movement
+
+// Define a function to move the servo gradually
+void moveServo(Servo &servo, byte &pos, int targetPos) {
+  if (pos != targetPos) {
+    if (pos < targetPos) {
+      pos += servoSpeed; // Increment position for acceleration
+      if (pos > targetPos) {
+        pos = targetPos; // Ensure we don't overshoot the target
+      }
+    } else {
+      pos -= servoSpeed; // Decrement position for deceleration
+      if (pos < targetPos) {
+        pos = targetPos; // Ensure we don't overshoot the target
+      }
+    }
+    servo.write(pos);
+    delay(15); // Adjust this delay as needed
   }
 }
 
-BLYNK_WRITE(V2)
-{
-  int val(param.asInt());
-  while (posSHOLDER>val){
-    SHOLDER.write(posSHOLDER);
-    posSHOLDER--;              // tell servo to go to position in variable 'pos'
-    delay(30);
-  }
-  while (posSHOLDER<val){
-    SHOLDER.write(posSHOLDER);
-    posSHOLDER++;              // tell servo to go to position in variable 'pos'
-    delay(30);
-  }
+
+BLYNK_WRITE(V0) {
+  int val = param.asInt();
+  moveServo(CLAW, posCLAW, val);
 }
 
-BLYNK_WRITE(V3)
-{
-  int val(param.asInt());
-  while (posELBOW>val){
-    ELBOW.write(posELBOW);
-    posELBOW--;              // tell servo to go to position in variable 'pos'
-    delay(30);
-  }
-  while (posELBOW<val){
-    ELBOW.write(posELBOW);
-    posELBOW++;              // tell servo to go to position in variable 'pos'
-    delay(30);
-  }
-}
-BLYNK_WRITE(V4)
-{
-  int val(param.asInt());
-  while (posPalm>val){
-    PALM.write(posPalm);
-    posPalm--;              // tell servo to go to position in variable 'pos'
-    delay(30);
-  }
-  while (posPalm<val){
-    PALM.write(posPalm);
-    posPalm++;              // tell servo to go to position in variable 'pos'
-    delay(30);
-  }
+BLYNK_WRITE(V1) {
+  int val = param.asInt();
+  moveServo(WRIST, posWRIST, val);
 }
 
-BLYNK_WRITE(V5)
-{
-  int val(param.asInt());
-  while (posBase>val){
-    BASE.write(posBase);
-    posBase--;              // tell servo to go to position in variable 'pos'
-    delay(30);
-  }
-  while (posBase<val){
-    BASE.write(posBase);
-    posBase++;              // tell servo to go to position in variable 'pos'
-    delay(30);
-  }
+BLYNK_WRITE(V2) {
+  int val = param.asInt();
+  moveServo(SHOLDER, posSHOLDER, val);
 }
+
+BLYNK_WRITE(V3) {
+  int val = param.asInt();
+  moveServo(ELBOW, posELBOW, val);
+}
+
+BLYNK_WRITE(V4) {
+  int val = param.asInt();
+  moveServo(PALM, posPalm, val);
+}
+
+BLYNK_WRITE(V5) {
+  int val = param.asInt();
+  moveServo(BASE, posBase, val);
+}
+
+
 void setup()
 {
   // Debug console
